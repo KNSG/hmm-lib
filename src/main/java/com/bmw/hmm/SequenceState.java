@@ -43,6 +43,13 @@ public class SequenceState<S, O, D> {
      */
     public final Double smoothingProbability;
 
+    /**
+     * initialization
+     * @param state
+     * @param observation
+     * @param transitionDescriptor
+     * @param smoothingProbability
+     */
     public SequenceState(S state, O observation, D transitionDescriptor, Double smoothingProbability) {
         this.state = state;
         this.observation = observation;

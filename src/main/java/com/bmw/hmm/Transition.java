@@ -25,38 +25,51 @@ import java.util.Objects;
  * @param <S> the state type
  */
 public class Transition<S> {
+	/** from state candidate */
     public final S fromCandidate;
+    /** to state candidate */
     public final S toCandidate;
 
+    /**
+     * initialization
+     * @param fromCandidate from state
+     * @param toCandidate to state
+     */
     public Transition(S fromCandidate, S toCandidate) {
         this.fromCandidate = fromCandidate;
         this.toCandidate = toCandidate;
     }
 
+    /* @see java.lang.Object#hashCode() */
     @Override
     public int hashCode() {
         return Objects.hash(fromCandidate, toCandidate);
     }
 
+    /* @see java.lang.Object#equals(java.lang.Object) */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+    	// case: same as this instance
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        // case: object is null
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        // case: different class
+        if (getClass() != obj.getClass()) {
             return false;
+        }
+        // check if fields are same
         @SuppressWarnings("unchecked")
         Transition<S> other = (Transition<S>) obj;
-        return Objects.equals(fromCandidate, other.fromCandidate) && Objects.equals(toCandidate,
-                other.toCandidate);
+        return Objects.equals(fromCandidate, other.fromCandidate) && Objects.equals(toCandidate,other.toCandidate);
     }
 
+    /* @see java.lang.Object#toString() */
     @Override
     public String toString() {
-        return "Transition [fromCandidate=" + fromCandidate + ", toCandidate="
-                + toCandidate + "]";
+        return "Transition [fromCandidate=" + fromCandidate + ", toCandidate=" + toCandidate + "]";
     }
-
-
 }

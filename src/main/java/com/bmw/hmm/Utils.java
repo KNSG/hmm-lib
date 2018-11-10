@@ -32,6 +32,7 @@ class Utils {
 
     static <S> Map<S, Double> logToNonLogProbabilities(Map<S, Double> logProbabilities) {
         final Map<S, Double> result = new LinkedHashMap<>();
+        
         for (Map.Entry<S, Double> entry : logProbabilities.entrySet()) {
             result.put(entry.getKey(), Math.exp(entry.getValue()));
         }

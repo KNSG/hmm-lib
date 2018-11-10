@@ -54,8 +54,7 @@ import java.util.Map;
  *
  * @param <S> the state type
  * @param <O> the observation type
- * @param <D> the transition descriptor type. Pass {@link Object} if transition descriptors are not
- * needed.
+ * @param <D> the transition descriptor type. Pass {@link Object} if transition descriptors are not needed.
  */
 public class ViterbiAlgorithm<S, O, D> {
 
@@ -76,10 +75,8 @@ public class ViterbiAlgorithm<S, O, D> {
         O observation;
         D transitionDescriptor;
 
-        ExtendedState(S state,
-                ExtendedState<S, O, D> backPointer,
-                O observation, D transitionDescriptor) {
-            this.state = state;
+        ExtendedState(S state, ExtendedState<S, O, D> backPointer, O observation, D transitionDescriptor) {
+            this.state       = state;
             this.backPointer = backPointer;
             this.observation = observation;
             this.transitionDescriptor = transitionDescriptor;
@@ -96,7 +93,7 @@ public class ViterbiAlgorithm<S, O, D> {
         final Map<S, ExtendedState<S, O, D>> newExtendedStates;
 
         ForwardStepResult(int numberStates) {
-            newMessage = new LinkedHashMap<>(Utils.initialHashMapCapacity(numberStates));
+            newMessage        = new LinkedHashMap<>(Utils.initialHashMapCapacity(numberStates));
             newExtendedStates = new LinkedHashMap<>(Utils.initialHashMapCapacity(numberStates));
         }
     }
@@ -129,7 +126,9 @@ public class ViterbiAlgorithm<S, O, D> {
     /**
      * Need to construct a new instance for each sequence of observations.
      */
-    public ViterbiAlgorithm() { }
+    public ViterbiAlgorithm() { 
+    	// nothing to do
+    }
 
     /**
      * Whether to store intermediate forward messages
@@ -144,7 +143,8 @@ public class ViterbiAlgorithm<S, O, D> {
 
         if (keepMessageHistory) {
             messageHistory = new ArrayList<>();
-        } else {
+        } 
+        else {
             messageHistory = null;
         }
         return this;
@@ -157,15 +157,15 @@ public class ViterbiAlgorithm<S, O, D> {
      * Default: false
      * Must be called before processing is started.
      */
-    public ViterbiAlgorithm<S, O, D> setComputeSmoothingProbabilities(
-            boolean computeSmoothingProbabilities) {
+    public ViterbiAlgorithm<S, O, D> setComputeSmoothingProbabilities(boolean computeSmoothingProbabilities) {
         if (processingStarted()) {
             throw new IllegalStateException("Processing has already started.");
         }
 
         if (computeSmoothingProbabilities) {
             forwardBackward = new ForwardBackwardAlgorithm<>();
-        } else {
+        } 
+        else {
             forwardBackward = null;
         }
         return this;
@@ -192,13 +192,11 @@ public class ViterbiAlgorithm<S, O, D> {
      * {@link #startWithInitialObservation(Object, Collection, Map)}
      * has already been called
      */
-    public void startWithInitialStateProbabilities(Collection<S> initialStates,
-            Map<S, Double> initialLogProbabilities) {
+    public void startWithInitialStateProbabilities(Collection<S> initialStates, Map<S, Double> initialLogProbabilities) {
         initializeStateProbabilities(null, initialStates, initialLogProbabilities);
 
         if (forwardBackward != null) {
-            forwardBackward.startWithInitialStateProbabilities(initialStates,
-                    Utils.logToNonLogProbabilities(initialLogProbabilities));
+            forwardBackward.startWithInitialStateProbabilities(initialStates,Utils.logToNonLogProbabilities(initialLogProbabilities));
         }
     }
 
@@ -216,13 +214,11 @@ public class ViterbiAlgorithm<S, O, D> {
      * @throws IllegalStateException if this method or
      * {@link #startWithInitialStateProbabilities(Collection, Map)}} has already been called
      */
-    public void startWithInitialObservation(O observation, Collection<S> candidates,
-            Map<S, Double> emissionLogProbabilities) {
+    public void startWithInitialObservation(O observation, Collection<S> candidates,Map<S, Double> emissionLogProbabilities) {
         initializeStateProbabilities(observation, candidates, emissionLogProbabilities);
 
         if (forwardBackward != null) {
-            forwardBackward.startWithInitialObservation(observation, candidates,
-                    Utils.logToNonLogProbabilities(emissionLogProbabilities));
+            forwardBackward.startWithInitialObservation(observation, candidates,Utils.logToNonLogProbabilities(emissionLogProbabilities));
         }
     }
 
@@ -245,14 +241,14 @@ public class ViterbiAlgorithm<S, O, D> {
      * {@link #startWithInitialObservation(Object, Collection, Map)}
      * has not been called before or if this method is called after an HMM break has occurred
      */
-    public void nextStep(O observation, Collection<S> candidates,
-            Map<S, Double> emissionLogProbabilities,
-            Map<Transition<S>, Double> transitionLogProbabilities,
-            Map<Transition<S>, D> transitionDescriptors) {
+    public void nextStep(O observation, 
+    					Collection<S> candidates,
+			            Map<S, Double> emissionLogProbabilities,
+			            Map<Transition<S>, Double> transitionLogProbabilities,
+			            Map<Transition<S>, D> transitionDescriptors) 
+    {
         if (!processingStarted()) {
-            throw new IllegalStateException(
-                    "startWithInitialStateProbabilities() or startWithInitialObservation() "
-                    + "must be called first.");
+            throw new IllegalStateException("startWithInitialStateProbabilities() or startWithInitialObservation() must be called first.");
         }
         if (isBroken) {
             throw new IllegalStateException("Method must not be called after an HMM break.");
